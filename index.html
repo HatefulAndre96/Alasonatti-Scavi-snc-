@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alasonatti Scavi | Movimento Terra e Lavori Forestali a Pessinetto (TO)</title>
+    <meta name="description" content="Alasonatti Scavi: impresa a gestione familiare da 4 generazioni, attiva a Pessinetto e in Val di Lanzo. Scavi, movimento terra, lavori forestali, sgombero neve, acquedotti e fognature. Preventivi gratuiti.">
+    <link rel="canonical" href="https://alasonattiscavisnc.netlify.app/">
+
+    <!-- Open Graph / Social preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <meta property="og:title" content="Alasonatti Scavi | Movimento Terra e Lavori Forestali a Pessinetto (TO)">
+    <meta property="og:description" content="Azienda a gestione familiare da 4 generazioni: scavi, movimento terra, lavori forestali, sgombero neve, acquedotti e fognature in Val di Lanzo.">
+    <meta property="og:url" content="https://alasonattiscavisnc.netlify.app/">
+    <meta property="og:image" content="https://alasonattiscavisnc.netlify.app/assets/img/og-cover.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Alasonatti Scavi | Movimento Terra e Lavori Forestali">
+    <meta name="twitter:description" content="Azienda a gestione familiare da 4 generazioni attiva a Pessinetto e in Val di Lanzo (TO).">
+    <meta name="twitter:image" content="https://alasonattiscavisnc.netlify.app/assets/img/og-cover.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+    <meta name="theme-color" content="#002D62">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS (compilato in build, niente CDN in produzione) -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <!-- Dati strutturati per Google (LocalBusiness / SEO locale) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "GeneralContractor",
+      "name": "Alasonatti Scavi",
+      "image": "https://alasonattiscavisnc.netlify.app/assets/img/og-cover.jpg",
+      "description": "Impresa a gestione familiare da 4 generazioni specializzata in movimento terra, scavi, lavori forestali, sgombero neve, acquedotti e fognature.",
+      "telephone": "+390123504231",
+      "email": "alasonattiscavi@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Fraz. Losa 4",
+        "addressLocality": "Pessinetto",
+        "postalCode": "10070",
+        "addressRegion": "TO",
+        "addressCountry": "IT"
+      },
+      "areaServed": "Val di Lanzo e provincia di Torino",
+      "url": "https://alasonattiscavisnc.netlify.app/",
+      "sameAs": [
+        "https://instagram.com/alasonattiscavi"
+      ]
+    }
+    </script>
+</head>
+<body class="font-body text-gray-800 bg-brand-light">
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[60] focus:top-2 focus:left-2 focus:bg-white focus:text-brand-blue focus:px-4 focus:py-2 focus:rounded">Salta al contenuto principale</a>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-brand-black/95 backdrop-blur-sm text-white shadow-lg transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24">
+                <!-- Logo -->
+                <a href="#" class="flex-shrink-0 flex items-center py-2" aria-label="Alasonatti Scavi - torna alla home">
+                    <img src="assets/img/logo.png" alt="Logo Alasonatti Scavi" class="h-20 w-auto object-contain"
+                         onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';">
+                    <span id="logo-fallback" style="display:none;" class="font-heading font-800 text-xl tracking-wide">ALASONATTI <span class="text-brand-orange">SCAVI</span></span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#chi-siamo" class="hover:text-brand-orange transition font-semibold">Chi Siamo</a>
+                    <a href="#servizi" class="hover:text-brand-orange transition font-semibold">Servizi</a>
+                    <a href="#galleria" class="hover:text-brand-orange transition font-semibold">Gallery</a>
+                    <a href="#contatti" class="bg-brand-orange text-white px-6 py-2 rounded-md font-bold hover:bg-orange-500 transition shadow-md">Richiedi Preventivo</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-white hover:text-brand-orange focus:outline-none" aria-expanded="false" aria-controls="mobile-menu" aria-label="Apri il menu di navigazione">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#menu"></use></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-black border-t border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
+                <a href="#chi-siamo" class="block px-3 py-2 text-base font-medium hover:text-brand-orange mobile-link">Chi Siamo</a>
+                <a href="#servizi" class="block px-3 py-2 text-base font-medium hover:text-brand-orange mobile-link">Servizi</a>
+                <a href="#galleria" class="block px-3 py-2 text-base font-medium hover:text-brand-orange mobile-link">Gallery</a>
+                <a href="#contatti" class="block px-3 py-2 text-base font-medium text-brand-orange mobile-link">Contatti</a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main">
+
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center pt-24">
+        <div class="absolute inset-0 z-0">
+            <img src="assets/img/hero.jpg"
+                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1621251919864-16a3e7db0160?q=80&w=2070&auto=format&fit=crop';"
+                 alt="Mezzi di Alasonatti Scavi al lavoro in Val di Lanzo"
+                 class="w-full h-full object-cover" fetchpriority="high">
+            <div class="absolute inset-0 hero-overlay"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+            <h1 class="font-heading font-800 text-4xl sm:text-5xl md:text-6xl text-white mb-6 uppercase tracking-tight leading-tight">
+                L'esperienza di 4 generazioni,<br>
+                <span class="text-brand-orange">al servizio del territorio.</span>
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-200 mb-10 max-w-3xl mx-auto font-light leading-relaxed">
+                Dal movimento terra alle opere forestali, dagli acquedotti allo sgombero neve: lavoriamo ogni giorno a Pessinetto e in tutta la Val di Lanzo con passione e competenza, per consegnare lavori fatti a regola d'arte.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="tel:+390123504231" class="bg-brand-orange text-white font-bold text-lg px-8 py-4 rounded hover:bg-orange-500 transition transform hover:-translate-y-1 shadow-lg flex items-center justify-center gap-2">
+                    <svg class="icon w-5 h-5"><use href="assets/img/icons.svg#phone-call"></use></svg> 0123 504231
+                </a>
+                <a href="#servizi" class="bg-brand-blue border border-brand-blue text-white font-bold text-lg px-8 py-4 rounded hover:bg-blue-800 transition transform hover:-translate-y-1 flex items-center justify-center gap-2 shadow-lg">
+                    Scopri i Servizi
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chi Siamo Section -->
+    <section id="chi-siamo" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="font-heading font-800 text-3xl md:text-4xl text-brand-blue mb-6">La nostra Storia, il nostro Lavoro</h2>
+                    <div class="w-20 h-2 bg-brand-orange mb-6"></div>
+                    <p class="text-gray-600 mb-4 text-lg leading-relaxed">
+                        Situata a Pessinetto (Fraz. Losa), nel cuore della Val di Lanzo, <strong>Alasonatti Scavi</strong> è un'azienda a <strong>gestione familiare giunta alla quarta generazione</strong>. Una tradizione tramandata di padre in figlio che unisce l'antica passione per il territorio montano alle competenze tecniche necessarie per affrontare ogni tipo di cantiere.
+                    </p>
+                    <p class="text-gray-600 mb-6 text-lg leading-relaxed">
+                        Il nostro obiettivo è <strong>lavorare bene</strong>. Seguiamo ogni intervento con la massima cura e precisione, dall'opera pubblica al lavoro per il privato, mantenendo sempre un occhio di riguardo al rispetto dell'ambiente che ci ospita.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-brand-blue font-semibold">
+                            <svg class="icon text-brand-orange w-6 h-6 flex-shrink-0"><use href="assets/img/icons.svg#history"></use></svg> Gestione familiare e affidabilità da 4 generazioni
+                        </li>
+                        <li class="flex items-center gap-3 text-brand-blue font-semibold">
+                            <svg class="icon text-brand-orange w-6 h-6 flex-shrink-0"><use href="assets/img/icons.svg#check-circle-2"></use></svg> Massima cura, precisione e lavori a regola d'arte
+                        </li>
+                        <li class="flex items-center gap-3 text-brand-blue font-semibold">
+                            <svg class="icon text-brand-orange w-6 h-6 flex-shrink-0"><use href="assets/img/icons.svg#award"></use></svg> Azienda qualificata con attestazione SOA per lavori pubblici
+                        </li>
+                        <li class="flex items-center gap-3 text-brand-blue font-semibold">
+                            <svg class="icon text-brand-orange w-6 h-6 flex-shrink-0"><use href="assets/img/icons.svg#leaf"></use></svg> Rispetto per il territorio e l'ambiente circostante
+                        </li>
+                    </ul>
+                </div>
+                <div class="relative">
+                    <div class="absolute inset-0 bg-brand-orange transform translate-x-4 translate-y-4 rounded-lg"></div>
+                    <img src="assets/img/chi-siamo.jpg"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2026&auto=format&fit=crop';"
+                         alt="Territorio montano della Val di Lanzo dove opera Alasonatti Scavi"
+                         loading="lazy"
+                         class="relative z-10 rounded-lg shadow-xl w-full h-auto object-cover"
+                         style="max-height: 500px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servizi Section -->
+    <section id="servizi" class="py-20 bg-brand-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-heading font-800 text-3xl md:text-4xl text-brand-blue mb-4">Aree di Intervento</h2>
+                <div class="w-20 h-2 bg-brand-orange mx-auto mb-4"></div>
+                <p class="text-gray-600 max-w-2xl mx-auto">Interventi specializzati per l'ambiente, l'urbanistica e le opere civili a Pessinetto, in Val di Lanzo e nella provincia di Torino, eseguiti con la massima competenza.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300 border-b-4 border-transparent hover:border-brand-orange group">
+                    <div class="bg-brand-light w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-orange group-hover:text-white transition text-brand-blue">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#snowflake"></use></svg>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl mb-3 text-brand-blue">Sgombero Neve</h3>
+                    <p class="text-gray-600">Servizio tempestivo e professionale di pulizia strade, piazzali e viabilità locale dalla neve, fondamentale durante l'inverno nelle valli montane torinesi.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300 border-b-4 border-transparent hover:border-brand-orange group">
+                    <div class="bg-brand-light w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-orange group-hover:text-white transition text-brand-blue">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#droplets"></use></svg>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl mb-3 text-brand-blue">Costruzione Acquedotti e Fognature</h3>
+                    <p class="text-gray-600">Realizzazione completa, posa e manutenzione di reti idriche e fognarie. Interventi precisi per garantire reti sicure, efficienti e durature nel tempo.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300 border-b-4 border-transparent hover:border-brand-orange group">
+                    <div class="bg-brand-light w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-orange group-hover:text-white transition text-brand-blue">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#waves"></use></svg>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl mb-3 text-brand-blue">Realizzazione Disalvei</h3>
+                    <p class="text-gray-600">Opere di sistemazione idrogeologica, pulizia dei letti fluviali, costruzione di scogliere e argini per la prevenzione dei rischi idrogeologici.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300 border-b-4 border-transparent hover:border-brand-orange group">
+                    <div class="bg-brand-light w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-orange group-hover:text-white transition text-brand-blue">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#map"></use></svg>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl mb-3 text-brand-blue">Strade e Opere Stradali</h3>
+                    <p class="text-gray-600">Costruzione di strade montane, viabilità rurale, ripristino carreggiate, asfaltature e creazione di piazzali per il settore pubblico e privato.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300 border-b-4 border-transparent hover:border-brand-orange group">
+                    <div class="bg-brand-light w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-orange group-hover:text-white transition text-brand-blue">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#tree-pine"></use></svg>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl mb-3 text-brand-blue">Lavori Agrari e Forestali</h3>
+                    <p class="text-gray-600">Gestione e manutenzione del patrimonio boschivo, pulizia terreni, disboscamento selettivo e riqualificazione ambientale con approccio sostenibile.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300 border-b-4 border-transparent hover:border-brand-orange group">
+                    <div class="bg-brand-light w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-orange group-hover:text-white transition text-brand-blue">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#building-2"></use></svg>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl mb-3 text-brand-blue">Realizzazione Fabbricati</h3>
+                    <p class="text-gray-600">Costruzione e ristrutturazione di fabbricati artigianali, civili e industriali. Prepariamo l'area dalle fondamenta fino all'opera completa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galleria Section -->
+    <section id="galleria" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-heading font-800 text-3xl md:text-4xl text-brand-blue mb-4">I Nostri Cantieri</h2>
+                <div class="w-20 h-2 bg-brand-orange mx-auto mb-4"></div>
+                <p class="text-gray-600 max-w-2xl mx-auto">Alcuni scatti dai lavori realizzati a Pessinetto e in Val di Lanzo.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div class="gallery-item aspect-square rounded-lg overflow-hidden bg-brand-light flex items-center justify-center relative">
+                    <img src="assets/img/gallery/cantiere-01.jpg" alt="Cantiere Alasonatti Scavi - foto 1" loading="lazy" class="w-full h-full object-cover"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display:none;" class="absolute inset-0 flex-col items-center justify-center text-brand-blue/40 gap-2">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#camera"></use></svg><span class="text-xs">Foto in arrivo</span>
+                    </div>
+                </div>
+                <div class="gallery-item aspect-square rounded-lg overflow-hidden bg-brand-light flex items-center justify-center relative">
+                    <img src="assets/img/gallery/cantiere-02.jpg" alt="Cantiere Alasonatti Scavi - foto 2" loading="lazy" class="w-full h-full object-cover"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display:none;" class="absolute inset-0 flex-col items-center justify-center text-brand-blue/40 gap-2">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#camera"></use></svg><span class="text-xs">Foto in arrivo</span>
+                    </div>
+                </div>
+                <div class="gallery-item aspect-square rounded-lg overflow-hidden bg-brand-light flex items-center justify-center relative">
+                    <img src="assets/img/gallery/cantiere-03.jpg" alt="Cantiere Alasonatti Scavi - foto 3" loading="lazy" class="w-full h-full object-cover"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display:none;" class="absolute inset-0 flex-col items-center justify-center text-brand-blue/40 gap-2">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#camera"></use></svg><span class="text-xs">Foto in arrivo</span>
+                    </div>
+                </div>
+                <div class="gallery-item aspect-square rounded-lg overflow-hidden bg-brand-light flex items-center justify-center relative">
+                    <img src="assets/img/gallery/cantiere-04.jpg" alt="Cantiere Alasonatti Scavi - foto 4" loading="lazy" class="w-full h-full object-cover"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display:none;" class="absolute inset-0 flex-col items-center justify-center text-brand-blue/40 gap-2">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#camera"></use></svg><span class="text-xs">Foto in arrivo</span>
+                    </div>
+                </div>
+                <div class="gallery-item aspect-square rounded-lg overflow-hidden bg-brand-light flex items-center justify-center relative">
+                    <img src="assets/img/gallery/cantiere-05.jpg" alt="Cantiere Alasonatti Scavi - foto 5" loading="lazy" class="w-full h-full object-cover"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display:none;" class="absolute inset-0 flex-col items-center justify-center text-brand-blue/40 gap-2">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#camera"></use></svg><span class="text-xs">Foto in arrivo</span>
+                    </div>
+                </div>
+                <div class="gallery-item aspect-square rounded-lg overflow-hidden bg-brand-light flex items-center justify-center relative">
+                    <img src="assets/img/gallery/cantiere-06.jpg" alt="Cantiere Alasonatti Scavi - foto 6" loading="lazy" class="w-full h-full object-cover"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display:none;" class="absolute inset-0 flex-col items-center justify-center text-brand-blue/40 gap-2">
+                        <svg class="icon w-8 h-8"><use href="assets/img/icons.svg#camera"></use></svg><span class="text-xs">Foto in arrivo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram CTA Section -->
+    <section id="instagram" class="py-20 bg-brand-blue text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5">
+            <div class="w-full h-full" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        </div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center justify-center p-4 bg-gradient-to-tr from-orange-400 via-red-500 to-purple-500 rounded-full mb-6">
+                <svg class="icon w-12 h-12 text-white"><use href="assets/img/icons.svg#instagram"></use></svg>
+            </div>
+            <h2 class="font-heading font-800 text-3xl md:text-5xl mb-6">Il Nostro Impegno Quotidiano</h2>
+            <div class="bg-white/10 p-8 rounded-2xl backdrop-blur-sm mb-10 border border-white/20 text-left">
+                <p class="text-lg md:text-xl text-gray-200 mb-6 leading-relaxed">
+                    Ogni giorno siamo sul campo per realizzare scavi, mettere in sicurezza i corsi d'acqua, costruire strade e prenderci cura delle aree boschive. Per noi di <strong>Alasonatti Scavi</strong>, ogni cantiere è una responsabilità: ci teniamo a consegnare opere sicure e ben fatte, risolvendo le problematiche dei nostri clienti con tempestività e competenza.
+                </p>
+                <p class="text-lg md:text-xl text-gray-200 leading-relaxed">
+                    Vuoi vedere come lavoriamo e restare aggiornato sulle nostre attività? Sulla nostra pagina Instagram condividiamo costantemente le foto dei nostri cantieri, i dettagli degli interventi e la bellezza dei territori montani in cui abbiamo la fortuna di operare.
+                </p>
+            </div>
+
+            <a href="https://instagram.com/alasonattiscavi" target="_blank" rel="noopener noreferrer" class="inline-flex bg-white text-brand-blue font-bold text-lg px-8 py-4 rounded-full hover:bg-gray-200 transition transform hover:-translate-y-1 shadow-lg items-center gap-3">
+                <svg class="icon w-6 h-6 text-brand-orange"><use href="assets/img/icons.svg#instagram"></use></svg> Vai alla Pagina Instagram
+            </a>
+        </div>
+    </section>
+
+    <!-- Contatti Section -->
+    <section id="contatti" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+
+                <!-- Info Contatti -->
+                <div>
+                    <h2 class="font-heading font-800 text-3xl md:text-4xl text-brand-blue mb-6">Mettiamoci in Contatto</h2>
+                    <div class="w-20 h-2 bg-brand-orange mb-8"></div>
+                    <p class="text-gray-600 mb-10 text-lg">
+                        Siamo a disposizione per consulenze, sopralluoghi gratuiti e preventivi per i tuoi progetti edili, forestali o stradali. Contattaci chiamando il nostro numero diretto.
+                    </p>
+
+                    <div class="space-y-6 mb-10">
+                        <div class="flex items-start gap-4 p-4 rounded-lg bg-brand-light border-l-4 border-brand-orange">
+                            <div class="text-brand-orange"><svg class="icon w-8 h-8"><use href="assets/img/icons.svg#map-pin"></use></svg></div>
+                            <div>
+                                <h4 class="font-bold text-lg text-brand-blue">Sede Aziendale</h4>
+                                <p class="text-gray-600">Fraz. Losa 4<br>10070 Pessinetto (TO)</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 rounded-lg bg-brand-light border-l-4 border-brand-orange">
+                            <div class="text-brand-orange"><svg class="icon w-8 h-8"><use href="assets/img/icons.svg#phone"></use></svg></div>
+                            <div>
+                                <h4 class="font-bold text-lg text-brand-blue">Telefono</h4>
+                                <p class="text-gray-600 text-xl font-semibold"><a href="tel:+390123504231" class="hover:text-brand-orange">0123 504231</a></p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 rounded-lg bg-brand-light border-l-4 border-brand-orange">
+                            <div class="text-brand-orange"><svg class="icon w-8 h-8"><use href="assets/img/icons.svg#mail"></use></svg></div>
+                            <div>
+                                <h4 class="font-bold text-lg text-brand-blue">Email</h4>
+                                <p class="text-gray-600"><a href="mailto:alasonattiscavi@gmail.com" class="hover:text-brand-orange">alasonattiscavi@gmail.com</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-xl overflow-hidden shadow-md border border-gray-200">
+                        <iframe
+                            title="Mappa - Sede Alasonatti Scavi, Fraz. Losa 4, Pessinetto (TO)"
+                            src="https://www.google.com/maps?q=Fraz.+Losa+4,+10070+Pessinetto+TO&output=embed"
+                            width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Form Contatti (Netlify Forms: nessuna dipendenza esterna, gestione submission integrata) -->
+                <div class="bg-brand-blue p-8 rounded-xl shadow-lg border border-gray-200">
+                    <h3 class="text-2xl font-bold text-white mb-6 font-heading">Inviaci un Messaggio</h3>
+
+                    <form name="contatti" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/grazie.html">
+                        <input type="hidden" name="form-name" value="contatti">
+                        <p class="hidden">
+                            <label>Non compilare questo campo: <input name="bot-field"></label>
+                        </p>
+
+                        <div class="mb-4">
+                            <label for="name" class="block text-sm font-semibold text-gray-200 mb-2">Nome e Cognome / Azienda</label>
+                            <input type="text" id="name" name="nome" class="w-full px-4 py-3 rounded-md border-0 focus:outline-none focus:ring-2 focus:ring-brand-orange text-gray-800" required placeholder="Mario Rossi">
+                        </div>
+                        <div class="mb-4">
+                            <label for="phone" class="block text-sm font-semibold text-gray-200 mb-2">Telefono</label>
+                            <input type="tel" id="phone" name="telefono" class="w-full px-4 py-3 rounded-md border-0 focus:outline-none focus:ring-2 focus:ring-brand-orange text-gray-800" required placeholder="Il tuo recapito telefonico">
+                        </div>
+                        <div class="mb-6">
+                            <label for="message" class="block text-sm font-semibold text-gray-200 mb-2">Descrivi la tua richiesta</label>
+                            <textarea id="message" name="messaggio" rows="4" class="w-full px-4 py-3 rounded-md border-0 focus:outline-none focus:ring-2 focus:ring-brand-orange text-gray-800" required placeholder="Scrivi qui di cosa hai bisogno..."></textarea>
+                        </div>
+                        <div class="flex items-start gap-3 mb-6">
+                            <input type="checkbox" id="privacy" name="privacy" required class="mt-1 w-4 h-4">
+                            <label for="privacy" class="text-sm text-gray-200">Ho letto e accetto l'<a href="privacy.html" target="_blank" class="underline hover:text-brand-orange">informativa sulla privacy</a> *</label>
+                        </div>
+                        <button type="submit" class="w-full bg-brand-orange text-white font-bold py-4 rounded-md hover:bg-orange-500 transition flex justify-center items-center gap-2 shadow-md">
+                            <svg class="icon w-5 h-5"><use href="assets/img/icons.svg#send"></use></svg> Invia Richiesta
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- Pulsante flottante Chiama Ora -->
+    <a href="tel:+390123504231" aria-label="Chiama Alasonatti Scavi"
+       class="fixed bottom-6 right-6 z-50 bg-brand-orange text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:bg-orange-500 transition transform hover:scale-110">
+        <svg class="icon w-6 h-6"><use href="assets/img/icons.svg#phone-call"></use></svg>
+    </a>
+
+    <!-- Footer -->
+    <footer class="bg-brand-black text-gray-400 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="mb-4">
+                        <img src="assets/img/logo.png" alt="Logo Alasonatti Scavi" class="h-16 w-auto object-contain"
+                             onerror="this.style.display='none';">
+                    </div>
+                    <p class="text-sm mb-4 leading-relaxed">
+                        Azienda a gestione familiare da 4 generazioni. Passione, professionalità e lavori fatti a regola d'arte nel settore edile, forestale e movimento terra a Pessinetto (TO) e in Val di Lanzo.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-sm border-b border-gray-800 pb-2 inline-block">Link Rapidi</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#chi-siamo" class="hover:text-brand-orange transition flex items-center gap-2"><svg class="icon w-4 h-4"><use href="assets/img/icons.svg#chevron-right"></use></svg> Chi Siamo</a></li>
+                        <li><a href="#servizi" class="hover:text-brand-orange transition flex items-center gap-2"><svg class="icon w-4 h-4"><use href="assets/img/icons.svg#chevron-right"></use></svg> Servizi Offerti</a></li>
+                        <li><a href="#galleria" class="hover:text-brand-orange transition flex items-center gap-2"><svg class="icon w-4 h-4"><use href="assets/img/icons.svg#chevron-right"></use></svg> Galleria Lavori</a></li>
+                        <li><a href="privacy.html" class="hover:text-brand-orange transition flex items-center gap-2"><svg class="icon w-4 h-4"><use href="assets/img/icons.svg#chevron-right"></use></svg> Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-sm border-b border-gray-800 pb-2 inline-block">Contatti & Info</h4>
+                    <div class="space-y-2 text-sm mb-4">
+                        <p><strong>Tel:</strong> <a href="tel:+390123504231" class="hover:text-brand-orange">0123 504231</a></p>
+                        <p><strong>Email:</strong> <a href="mailto:alasonattiscavi@gmail.com" class="hover:text-brand-orange">alasonattiscavi@gmail.com</a></p>
+                        <p><strong>Sede:</strong> Fraz. Losa 4, 10070 Pessinetto (TO)</p>
+                    </div>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="https://instagram.com/alasonattiscavi" target="_blank" rel="noopener noreferrer" aria-label="Instagram Alasonatti Scavi" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-orange hover:text-white transition">
+                            <svg class="icon w-5 h-5"><use href="assets/img/icons.svg#instagram"></use></svg>
+                        </a>
+                    </div>
+                    <p class="text-xs text-gray-600">P.IVA: 04872310018</p>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-sm">
+                <p>&copy; <span id="year"></span> Alasonatti Scavi di Pessinetto. Tutti i diritti riservati.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            btn.addEventListener('click', () => {
+                const isOpen = menu.classList.toggle('hidden') === false;
+                btn.setAttribute('aria-expanded', String(isOpen));
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                    btn.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('nav');
+                if (window.scrollY > 10) {
+                    nav.classList.add('shadow-lg');
+                    nav.classList.replace('bg-brand-black/95', 'bg-brand-black/100');
+                } else {
+                    nav.classList.remove('shadow-lg');
+                    nav.classList.replace('bg-brand-black/100', 'bg-brand-black/95');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
