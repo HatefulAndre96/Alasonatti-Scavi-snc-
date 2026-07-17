@@ -17,3 +17,7 @@ html {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+.icon-solid {
+  fill: currentColor;
+}

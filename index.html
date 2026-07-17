@@ -351,6 +351,14 @@
                                 <p class="text-gray-600"><a href="mailto:alasonattiscavi@gmail.com" class="hover:text-brand-orange">alasonattiscavi@gmail.com</a></p>
                             </div>
                         </div>
+
+                        <div class="flex items-start gap-4 p-4 rounded-lg bg-brand-light border-l-4 border-brand-orange">
+                            <div class="text-brand-orange"><svg class="icon-solid w-8 h-8"><use href="assets/img/icons.svg#whatsapp"></use></svg></div>
+                            <div>
+                                <h4 class="font-bold text-lg text-brand-blue">WhatsApp</h4>
+                                <p class="text-gray-600 text-xl font-semibold"><a href="https://wa.me/393397340128" target="_blank" rel="noopener noreferrer" class="hover:text-brand-orange">339 734 0128</a></p>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="rounded-xl overflow-hidden shadow-md border border-gray-200">
@@ -400,11 +408,17 @@
 
     </main>
 
-    <!-- Pulsante flottante Chiama Ora -->
-    <a href="tel:+390123504231" aria-label="Chiama Alasonatti Scavi"
-       class="fixed bottom-6 right-6 z-50 bg-brand-orange text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:bg-orange-500 transition transform hover:scale-110">
-        <svg class="icon w-6 h-6"><use href="assets/img/icons.svg#phone-call"></use></svg>
-    </a>
+    <!-- Pulsanti flottanti: WhatsApp e Chiama Ora -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+        <a href="https://wa.me/393397340128" target="_blank" rel="noopener noreferrer" aria-label="Scrivi su WhatsApp ad Alasonatti Scavi"
+           class="bg-[#25D366] text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:brightness-110 transition transform hover:scale-110">
+            <svg class="icon-solid w-6 h-6"><use href="assets/img/icons.svg#whatsapp"></use></svg>
+        </a>
+        <a href="tel:+390123504231" aria-label="Chiama Alasonatti Scavi"
+           class="bg-brand-orange text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center hover:bg-orange-500 transition transform hover:scale-110">
+            <svg class="icon w-6 h-6"><use href="assets/img/icons.svg#phone-call"></use></svg>
+        </a>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-brand-black text-gray-400 py-12 border-t border-gray-800">
