@@ -307,6 +307,8 @@
 
   function getCtx() {
     if (!st.ctx) {
+      // iOS: senza questo l'anteprima resta muta con l'interruttore silenzioso attivo
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (_) {}
       const AC = window.AudioContext || window.webkitAudioContext;
       st.ctx = new AC();
     }
