@@ -11,7 +11,7 @@ in una suoneria per iPhone.
 - iOS 26+: File → Condividi → "Usa come suoneria" (limite 30 s).
   iOS 18 e precedenti: passaggio tramite GarageBand (istruzioni nella pagina).
 
-Online, con il deploy Netlify attuale, è raggiungibile su `/suonerie/`.
+Online, con il deploy Netlify attuale, è raggiungibile su `/suonerieiphone/` (il vecchio `/suonerie/` reindirizza qui).
 La pagina ha `noindex` per non finire nei risultati di ricerca del sito aziendale.
 
 ## Video dell'iPhone (.mov)
