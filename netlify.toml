@@ -6,3 +6,8 @@
   for = "/assets/css/styles.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+[[redirects]]
+  from = "/suonerie/*"
+  to = "/suonerieiphone/:splat"
+  status = 301
