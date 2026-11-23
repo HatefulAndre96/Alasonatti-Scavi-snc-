@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b0b0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Suonerie">
+<title>Crea Suonerie</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0b0b0f;
+    --card: #17171d;
+    --card-2: #202029;
+    --line: #2c2c37;
+    --text: #f2f2f7;
+    --muted: #9a9aa8;
+    --accent: #ff375f;
+    --accent-2: #ff9f0a;
+    --ok: #30d158;
+    --wave: #4a4a5a;
+    --wave-sel: #ff375f;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    touch-action: manipulation;
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  }
+  main { max-width: 640px; margin: 0 auto; padding: 20px 16px 48px; }
+  header { padding: 12px 4px 20px; }
+  h1 { font-size: 32px; line-height: 1.1; margin: 0 0 6px; letter-spacing: -0.02em; }
+  h1 span { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .sub { color: var(--muted); margin: 0; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 12px; font-weight: 600; }
+  .card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+  .hidden { display: none !important; }
+
+  /* Upload */
+  .drop {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    border: 2px dashed var(--line); border-radius: 14px; padding: 28px 16px; text-align: center;
+    cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  .drop:hover, .drop.over { border-color: var(--accent); background: rgba(255,55,95,.06); }
+  .drop .big { font-size: 40px; line-height: 1; }
+  .drop strong { font-size: 17px; }
+  .drop small { color: var(--muted); }
+  .file-info { display: flex; justify-content: space-between; gap: 12px; margin-top: 12px; color: var(--muted); font-size: 14px; }
+  .file-info b { color: var(--text); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Segmented */
+  .seg { display: flex; background: var(--card-2); border-radius: 10px; padding: 3px; margin-bottom: 14px; }
+  .seg button { flex: 1; border: 0; background: transparent; color: var(--text); padding: 8px 6px; border-radius: 8px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .seg button.on { background: #3a3a46; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
+
+  /* Waveform */
+  .wave-wrap { position: relative; height: 96px; border-radius: 10px; background: var(--card-2); overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
+  .wave-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .sel {
+    position: absolute; top: 0; bottom: 0; border: 2px solid var(--accent); border-radius: 8px;
+    background: rgba(255,55,95,.14); cursor: grab; min-width: 6px;
+  }
+  .sel:active { cursor: grabbing; }
+  .handle { position: absolute; top: 0; bottom: 0; width: 26px; display: flex; align-items: center; justify-content: center; cursor: ew-resize; }
+  .handle::after { content: ""; width: 6px; height: 34px; border-radius: 3px; background: var(--accent); box-shadow: 0 0 0 2px var(--card-2); }
+  .handle.l { left: -14px; }
+  .handle.r { right: -14px; }
+  .playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; pointer-events: none; display: none; }
+  .detail { position: relative; height: 70px; margin-top: 10px; border-radius: 10px; background: var(--card-2); overflow: hidden; }
+  .detail canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hint { color: var(--muted); font-size: 13px; margin: 8px 2px 0; }
+
+  /* Time controls */
+  .times { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .time { background: var(--card-2); border-radius: 12px; padding: 8px 10px; }
+  .time label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .time .row { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .time output { font-variant-numeric: tabular-nums; font-size: 18px; font-weight: 600; }
+  .nudge { width: 36px; height: 36px; border-radius: 10px; border: 0; background: #33333f; color: var(--text); font-size: 20px; line-height: 1; cursor: pointer; flex: none; }
+  .nudge:active { background: #464655; }
+  .len { margin-top: 10px; text-align: center; font-size: 14px; color: var(--muted); }
+  .len b { color: var(--text); font-variant-numeric: tabular-nums; }
+  .len.warn b { color: var(--accent-2); }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    border: 0; border-radius: 14px; padding: 14px 18px; font: inherit; font-weight: 600; font-size: 17px;
+    cursor: pointer; text-decoration: none; color: #fff; background: #33333f; width: 100%;
+  }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn.primary { background: linear-gradient(90deg, var(--accent), #ff5e3a); }
+  .btn.ok { background: var(--ok); color: #04210d; }
+  .btn-row { display: flex; gap: 10px; margin-top: 14px; }
+  .btn-row .btn { flex: 1; }
+  .btn.small { padding: 10px 12px; font-size: 15px; border-radius: 12px; }
+  .btn.toggle.on { background: #3a2a30; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+
+  /* Options */
+  .opt { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .opt:last-child { border-bottom: 0; }
+  .opt .lbl { flex: none; }
+  .opt .lbl small { display: block; color: var(--muted); font-size: 13px; }
+  .opt input[type=range] { flex: 1; max-width: 200px; accent-color: var(--accent); }
+  .opt .val { width: 52px; flex: none; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
+  .switch { position: relative; width: 51px; height: 31px; flex: none; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch span { position: absolute; inset: 0; background: #39393d; border-radius: 31px; transition: .2s; cursor: pointer; }
+  .switch span::before { content: ""; position: absolute; width: 27px; height: 27px; left: 2px; top: 2px; background: #fff; border-radius: 50%; transition: .2s; }
+  .switch input:checked + span { background: var(--ok); }
+  .switch input:checked + span::before { transform: translateX(20px); }
+  .name-input { width: 100%; background: var(--card-2); border: 1px solid var(--line); color: var(--text); border-radius: 12px; padding: 12px; font: inherit; font-size: 16px; }
+  .name-input:focus { outline: none; border-color: var(--accent); }
+
+  .progress { height: 6px; background: var(--card-2); border-radius: 3px; overflow: hidden; margin-top: 12px; }
+  .progress div { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .1s; }
+  .result audio { width: 100%; margin-top: 12px; }
+  .done { color: var(--ok); font-weight: 600; margin: 12px 0 0; }
+
+  /* Guide */
+  .guide ol { margin: 0; padding-left: 22px; }
+  .guide li { margin-bottom: 8px; }
+  .guide li b { color: var(--text); }
+  .guide .note { color: var(--muted); font-size: 14px; margin: 12px 0 0; }
+  .tip { background: rgba(255,159,10,.1); border: 1px solid rgba(255,159,10,.3); color: #ffd28a; border-radius: 12px; padding: 10px 12px; font-size: 14px; margin-top: 12px; }
+
+  .rt { margin-top: 12px; background: var(--card-2); border-radius: 12px; padding: 12px; font-size: 14px; }
+  .rt p { margin: 0 0 10px; color: var(--muted); }
+  .rt p b { color: var(--text); }
+  .err { background: rgba(255,69,58,.12); border: 1px solid rgba(255,69,58,.35); color: #ffb3ad; border-radius: 12px; padding: 10px 12px; font-size: 14px; margin-top: 12px; }
+  .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  footer { text-align: center; color: var(--muted); font-size: 13px; padding: 8px 16px 24px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Crea <span>Suonerie</span></h1>
+    <p class="sub">Carica un video o un audio, scegli il pezzo, scarica la suoneria per iPhone. Tutto succede sul tuo telefono: nessun file viene caricato da nessuna parte.</p>
+  </header>
+
+  <!-- 1. Upload -->
+  <section class="card">
+    <h2>1 · Scegli il file</h2>
+    <label class="drop" id="drop">
+      <div class="big">🎵</div>
+      <strong id="dropTitle">Tocca per scegliere un video o un audio</strong>
+      <small>MP3, M4A, WAV, MP4, MOV… dalla galleria o da File</small>
+      <input type="file" id="file" accept="audio/*,video/*" hidden>
+    </label>
+    <div class="file-info hidden" id="fileInfo"><b id="fileName"></b><span id="fileDur"></span></div>
+    <div class="err hidden" id="loadErr"></div>
+    <div class="rt hidden" id="rtBox">
+      <p>Safari non riesce a leggere l'audio di questo video in modo diretto. Posso estrarlo riproducendolo in silenzio: ci vuole <b id="rtTime">quanto dura il video</b>. Tieni lo schermo acceso e il sito aperto.</p>
+      <button type="button" class="btn primary" id="rtBtn">🎧 Estrai l'audio</button>
+      <div class="progress hidden" id="rtProg"><div id="rtBar"></div></div>
+      <button type="button" class="btn small hidden" id="rtCancel" style="margin-top:10px">Annulla</button>
+    </div>
+  </section>
+
+  <!-- 2. Editor -->
+  <section class="card hidden" id="editor">
+    <h2>2 · Scegli il pezzo</h2>
+    <div class="seg" id="modeSeg">
+      <button type="button" data-mode="ring" class="on">Suoneria · max 29 s</button>
+      <button type="button" data-mode="alert">Avviso · max 8 s</button>
+    </div>
+
+    <div class="wave-wrap" id="waveWrap">
+      <canvas id="wave"></canvas>
+      <div class="sel" id="sel">
+        <div class="handle l" data-h="l"></div>
+        <div class="handle r" data-h="r"></div>
+      </div>
+      <div class="playhead" id="playheadAll"></div>
+    </div>
+    <p class="hint">Trascina il riquadro per spostarlo, le maniglie per allungarlo o accorciarlo. Tocca un punto per saltare lì.</p>
+
+    <div class="detail"><canvas id="detail"></canvas><div class="playhead" id="playheadDet"></div></div>
+
+    <div class="times">
+      <div class="time">
+        <label>Inizio</label>
+        <div class="row">
+          <button type="button" class="nudge" data-nudge="start" data-d="-0.1" aria-label="Inizio indietro">−</button>
+          <output id="tStart">0:00.0</output>
+          <button type="button" class="nudge" data-nudge="start" data-d="0.1" aria-label="Inizio avanti">+</button>
+        </div>
+      </div>
+      <div class="time">
+        <label>Fine</label>
+        <div class="row">
+          <button type="button" class="nudge" data-nudge="end" data-d="-0.1" aria-label="Fine indietro">−</button>
+          <output id="tEnd">0:00.0</output>
+          <button type="button" class="nudge" data-nudge="end" data-d="0.1" aria-label="Fine avanti">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="len" id="lenBox">Durata: <b id="tLen">0.0 s</b></div>
+
+    <div class="btn-row">
+      <button type="button" class="btn primary" id="playBtn">▶︎ Ascolta</button>
+      <button type="button" class="btn small toggle on" id="loopBtn" style="flex:0 0 auto;width:auto">🔁 Loop</button>
+    </div>
+  </section>
+
+  <!-- 3. Effects + export -->
+  <section class="card hidden" id="export">
+    <h2>3 · Rifinisci e scarica</h2>
+    <div class="opt">
+      <div class="lbl">Dissolvenza in entrata<small>Parte piano e sale</small></div>
+      <input type="range" id="fadeIn" min="0" max="3" step="0.1" value="0.5">
+      <span class="val" id="fadeInV">0.5 s</span>
+    </div>
+    <div class="opt">
+      <div class="lbl">Dissolvenza in uscita<small>Sfuma alla fine</small></div>
+      <input type="range" id="fadeOut" min="0" max="3" step="0.1" value="1">
+      <span class="val" id="fadeOutV">1.0 s</span>
+    </div>
+    <div class="opt">
+      <div class="lbl">Volume al massimo<small>Normalizza: niente suonerie sussurrate</small></div>
+      <label class="switch"><input type="checkbox" id="norm" checked><span></span></label>
+    </div>
+    <div class="opt" style="display:block">
+      <div class="lbl" style="margin-bottom:8px">Nome della suoneria</div>
+      <input class="name-input" id="name" type="text" maxlength="60" autocomplete="off" placeholder="La mia suoneria">
+    </div>
+
+    <button type="button" class="btn ok" id="makeBtn" style="margin-top:14px">⬇︎ Crea suoneria</button>
+    <div class="progress hidden" id="prog"><div id="progBar"></div></div>
+
+    <div class="result hidden" id="result">
+      <p class="done">✓ Pronta! Ora salvala:</p>
+      <audio id="resAudio" controls></audio>
+      <div class="btn-row">
+        <a class="btn primary" id="dlBtn" download>⬇︎ Scarica</a>
+        <button type="button" class="btn hidden" id="shareBtn">↗︎ Salva in File</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guide -->
+  <section class="card guide">
+    <h2>Come impostarla sull'iPhone</h2>
+    <div class="seg" id="guideSeg">
+      <button type="button" data-g="g26" class="on">iOS 26 o successivo</button>
+      <button type="button" data-g="g18">iOS 18 o precedente</button>
+    </div>
+
+    <div id="g26">
+      <ol>
+        <li>Tocca <b>Scarica</b> (o <b>Salva in File</b>): il file finisce in <b>File → Download</b>.</li>
+        <li>Apri l'app <b>File</b> e tocca la suoneria per aprirla.</li>
+        <li>Tocca <b>Condividi</b> (il quadrato con la freccia) e scegli <b>Usa come suoneria</b>. Se non lo vedi, scorri o tocca <b>Altro</b>.</li>
+        <li>Conferma in Impostazioni. Fatto, ora suona.</li>
+      </ol>
+      <p class="note">La versione di iOS la trovi in Impostazioni → Generali → Info. iPhone 11 e successivi possono aggiornare a iOS 26 da Impostazioni → Generali → Aggiornamento software.</p>
+    </div>
+
+    <div id="g18" class="hidden">
+      <ol>
+        <li>Scarica la suoneria (finisce in <b>File → Download</b>).</li>
+        <li>Installa <b>GarageBand</b> dall'App Store (gratis, è di Apple).</li>
+        <li>Apri GarageBand, crea un brano nuovo e scegli <b>Registratore audio</b>.</li>
+        <li>Tocca l'icona della <b>vista tracce</b> (i mattoncini, in alto a sinistra).</li>
+        <li>Tocca l'icona <b>loop</b> (in alto a destra) → scheda <b>File</b> → <b>Sfoglia gli elementi dall'app File</b> → scegli la suoneria.</li>
+        <li>Tieni premuto il file e <b>trascinalo all'inizio</b> della traccia.</li>
+        <li>Tocca <b>+</b> (in alto a destra sopra la traccia) → <b>Sezione A</b> → attiva <b>Automatico</b>, così non viene tagliata.</li>
+        <li>Tocca la freccia <b>▾</b> in alto a sinistra → <b>I miei brani</b>.</li>
+        <li>Tieni premuto il progetto → <b>Condividi</b> → <b>Suoneria</b> → <b>Esporta</b> → <b>Usa suono come…</b> → <b>Suoneria standard</b>.</li>
+      </ol>
+      <p class="note">I nomi delle voci possono cambiare un po' tra versioni di GarageBand.</p>
+      <div class="tip">Consiglio onesto: aggiornare a iOS 26 ti risparmia tutto questo giro. Su iPhone 11 e successivi è gratis.</div>
+    </div>
+  </section>
+</main>
+<footer>Tutto elaborato in locale nel browser. Usa solo audio e video di cui hai i diritti.</footer>
+
+<script src="vendor/lame.min.js"></script>
+<script src="estrai-audio.js"></script>
+<script>
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const OUT_RATE = 44100;
+  const KBPS = 192;
+  const MODES = { ring: { max: 29, def: 29 }, alert: { max: 8, def: 4 } };
+  const MIN_LEN = 0.5;
+
+  const st = {
+    ctx: null, buf: null, peaks: null, fileBase: 'suoneria',
+    start: 0, end: 0, mode: 'ring',
+    playing: null, playT0: 0, playLen: 0, raf: 0,
+    rendered: null, renderedKey: '', resultUrl: null, resultFile: null,
+  };
+
+  // ---------- helpers ----------
+  const fmt = (t) => {
+    t = Math.max(0, t);
+    const m = Math.floor(t / 60);
+    const s = t - m * 60;
+    return m + ':' + (s < 10 ? '0' : '') + s.toFixed(1);
+  };
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const dur = () => (st.buf ? st.buf.duration : 0);
+  const maxLen = () => Math.min(MODES[st.mode].max, dur());
+  const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+  function getCtx() {
+    if (!st.ctx) {
+      // iOS: senza questo l'anteprima resta muta con l'interruttore silenzioso attivo
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (_) {}
+      const AC = window.AudioContext || window.webkitAudioContext;
+      st.ctx = new AC();
+    }
+    return st.ctx;
+  }
+
+  // ---------- load ----------
+  const drop = $('drop');
+  $('file').addEventListener('change', (e) => { const f = e.target.files[0]; if (f) load(f); e.target.value = ''; });
+  ['dragenter', 'dragover'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', (e) => { const f = e.dataTransfer.files[0]; if (f) load(f); });
+
+  // ?force=wc salta ADTS, ?force=rt va dritto alla registrazione (solo per test)
+  const FORCE = new URLSearchParams(location.search).get('force') || '';
+  const EA = window.EstraiAudio;
+  const isVideoLike = (f) => /^video\//.test(f.type) || /\.(mov|mp4|m4v|3gp|qt)$/i.test(f.name);
+  let rtFile = null, rtAbort = null;
+
+  function showErr(msg) { const e = $('loadErr'); e.textContent = msg; e.classList.remove('hidden'); }
+
+  function videoDuration(file) {
+    return new Promise((res) => {
+      const v = document.createElement('video'), u = URL.createObjectURL(file);
+      const done = (d) => { URL.revokeObjectURL(u); res(d); };
+      v.preload = 'metadata'; v.muted = true;
+      v.onloadedmetadata = () => done(isFinite(v.duration) ? v.duration : 0);
+      v.onerror = () => done(0);
+      setTimeout(() => done(0), 5000);
+      v.src = u;
+    });
+  }
+
+  async function load(file) {
+    stop();
+    if (rtAbort) rtAbort.abort();
+    rtFile = null;
+    $('loadErr').classList.add('hidden');
+    $('rtBox').classList.add('hidden');
+    $('dropTitle').innerHTML = '<span class="spinner" style="display:inline-block;vertical-align:middle"></span> Estraggo l\'audio…';
+    const ctx = getCtx();
+    let buf = null, noAudio = false;
+    const tryDirect = async () => {
+      if (FORCE || (isVideoLike(file) && file.size > 250e6)) return null; // video enormi: niente file intero in RAM
+      try { return await EA.decodeAudioDataP(ctx, await file.arrayBuffer()); } catch (e) { console.warn('decodifica diretta', e); return null; }
+    };
+    const tryContainer = async () => {
+      if (FORCE === 'rt') return null;
+      try { return await EA.fromContainer(file, ctx, { skipAdts: FORCE === 'wc' }); }
+      catch (e) { console.warn('estrazione contenitore', e, e.causes); if (e.name === 'NoAudioError') noAudio = true; return null; }
+    };
+    try {
+      if (isVideoLike(file)) { buf = await tryContainer(); if (!buf && !noAudio) buf = await tryDirect(); }
+      else { buf = await tryDirect(); if (!buf) buf = await tryContainer(); }
+
+      if (buf && buf.duration) return onDecoded(buf, file);
+      if (noAudio) {
+        showErr('Questo video non ha una traccia audio. Succede con time-lapse, registrazioni dello schermo senza microfono e alcuni video salvati dai social.');
+      } else if (isVideoLike(file) || !file.type) {
+        rtFile = file;
+        const d = await videoDuration(file);
+        $('rtTime').textContent = d ? 'circa ' + fmt(d).replace(/\.\d$/, '') : 'quanto dura il video';
+        $('rtBox').classList.remove('hidden');
+      } else {
+        showErr('Non riesco a leggere l\'audio di questo file. Prova con un altro formato (MP3, M4A, MP4).');
+      }
+    } finally {
+      $('dropTitle').textContent = st.buf ? 'Cambia file' : 'Tocca per scegliere un video o un audio';
+    }
+  }
+
+  $('rtBtn').addEventListener('click', async () => {
+    if (!rtFile) return;
+    const file = rtFile;
+    rtAbort = new AbortController();
+    $('rtBtn').classList.add('hidden'); $('rtProg').classList.remove('hidden'); $('rtCancel').classList.remove('hidden');
+    $('rtBar').style.width = '0%';
+    try {
+      const buf = await EA.captureRealtime(file, getCtx(), (p) => { $('rtBar').style.width = Math.round(p * 100) + '%'; }, rtAbort.signal);
+      $('rtBox').classList.add('hidden');
+      onDecoded(buf, file);
+    } catch (e) {
+      console.warn('registrazione', e);
+      if (e.name === 'NoAudioError') { $('rtBox').classList.add('hidden'); showErr('Questo video sembra non avere audio (o è completamente muto).'); }
+      else if (e.name !== 'AbortError') { $('rtBox').classList.add('hidden'); showErr('Non sono riuscito a estrarre l\'audio nemmeno così. Prova a salvare il video come MP4 (es. condividendolo su WhatsApp con te stesso) e ricaricalo.'); }
+    } finally {
+      rtAbort = null;
+      $('rtBtn').classList.remove('hidden'); $('rtProg').classList.add('hidden'); $('rtCancel').classList.add('hidden');
+    }
+  });
+  $('rtCancel').addEventListener('click', () => { if (rtAbort) rtAbort.abort(); });
+
+  function onDecoded(buf, file) {
+    {
+      st.buf = buf;
+      st.fileBase = file.name.replace(/\.[^.]+$/, '').slice(0, 60) || 'suoneria';
+      $('name').value = st.fileBase;
+      $('fileName').textContent = file.name;
+      $('fileDur').textContent = fmt(buf.duration);
+      $('fileInfo').classList.remove('hidden');
+      $('editor').classList.remove('hidden');
+      $('export').classList.remove('hidden');
+      $('result').classList.add('hidden');
+      computePeaks();
+      setMode(st.mode, true);
+      requestAnimationFrame(() => { drawWave(); layout(); });
+      $('dropTitle').textContent = 'Cambia file';
+    }
+  }
+
+  // ---------- peaks / drawing ----------
+  function computePeaks() {
+    const N = 3000;
+    const b = st.buf, len = b.length, ch = b.numberOfChannels;
+    const data = []; for (let c = 0; c < ch; c++) data.push(b.getChannelData(c));
+    const peaks = new Float32Array(N);
+    const step = len / N;
+    const stride = Math.max(1, Math.floor(step / 200));
+    let gmax = 0;
+    for (let i = 0; i < N; i++) {
+      const s0 = Math.floor(i * step), s1 = Math.min(len, Math.floor((i + 1) * step));
+      let m = 0;
+      for (let s = s0; s < s1; s += stride) for (let c = 0; c < ch; c++) { const v = Math.abs(data[c][s]); if (v > m) m = v; }
+      peaks[i] = m; if (m > gmax) gmax = m;
+    }
+    if (gmax > 0) for (let i = 0; i < N; i++) peaks[i] /= gmax;
+    st.peaks = peaks;
+  }
+
+  function fitCanvas(cv) {
+    const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr));
+    return { g: cv.getContext('2d'), w: cv.width, h: cv.height, dpr };
+  }
+
+  function drawWave() {
+    if (!st.peaks) return;
+    const { g, w, h, dpr } = fitCanvas($('wave'));
+    const P = st.peaks, N = P.length, bar = 2 * dpr, gap = 1 * dpr;
+    const a = st.start / dur(), b = st.end / dur();
+    const cOff = cssVar('--wave'), cOn = cssVar('--wave-sel');
+    for (let x = 0; x < w; x += bar + gap) {
+      const i0 = Math.floor(x / w * N), i1 = Math.max(i0 + 1, Math.floor((x + bar) / w * N));
+      let m = 0; for (let i = i0; i < i1 && i < N; i++) if (P[i] > m) m = P[i];
+      const bh = Math.max(2 * dpr, m * (h - 12 * dpr));
+      const f = x / w;
+      g.fillStyle = (f >= a && f <= b) ? cOn : cOff;
+      g.fillRect(x, (h - bh) / 2, bar, bh);
+    }
+  }
+
+  function drawDetail() {
+    if (!st.buf) return;
+    const { g, w, h, dpr } = fitCanvas($('detail'));
+    const b = st.buf, sr = b.sampleRate, ch = b.numberOfChannels;
+    const s0 = Math.floor(st.start * sr), s1 = Math.floor(st.end * sr), n = Math.max(1, s1 - s0);
+    const data = []; for (let c = 0; c < ch; c++) data.push(b.getChannelData(c));
+    // peak of selection for scale
+    const cols = Math.floor(w / dpr);
+    const vals = new Float32Array(cols);
+    let gmax = 0;
+    for (let x = 0; x < cols; x++) {
+      const a = s0 + Math.floor(x / cols * n), z = s0 + Math.floor((x + 1) / cols * n);
+      const stride = Math.max(1, Math.floor((z - a) / 150));
+      let m = 0;
+      for (let s = a; s < z; s += stride) for (let c = 0; c < ch; c++) { const v = Math.abs(data[c][s] || 0); if (v > m) m = v; }
+      vals[x] = m; if (m > gmax) gmax = m;
+    }
+    const L = st.end - st.start, fi = +$('fadeIn').value, fo = +$('fadeOut').value;
+    const env = (t) => { let e = 1; if (fi > 0 && t < fi) e = Math.min(e, t / fi); if (fo > 0 && t > L - fo) e = Math.min(e, (L - t) / fo); return clamp(e, 0, 1); };
+    const grad = g.createLinearGradient(0, 0, w, 0);
+    grad.addColorStop(0, cssVar('--accent')); grad.addColorStop(1, cssVar('--accent-2'));
+    g.fillStyle = grad;
+    for (let x = 0; x < cols; x++) {
+      const e = env(x / cols * L);
+      const v = (gmax > 0 ? vals[x] / gmax : 0) * e;
+      const bh = Math.max(1 * dpr, v * (h - 10 * dpr));
+      g.fillRect(x * dpr, (h - bh) / 2, Math.max(1, dpr * 0.8), bh);
+    }
+    // envelope line
+    g.strokeStyle = 'rgba(255,255,255,.55)'; g.lineWidth = 1.5 * dpr; g.beginPath();
+    for (let x = 0; x <= cols; x++) { const y = h - 3 * dpr - env(x / cols * L) * (h - 6 * dpr); x ? g.lineTo(x * dpr, y) : g.moveTo(0, y); }
+    g.stroke();
+  }
+
+  // ---------- selection ----------
+  const wrap = $('waveWrap'), sel = $('sel');
+
+  function layout() {
+    if (!st.buf) return;
+    const W = wrap.clientWidth, D = dur();
+    sel.style.left = (st.start / D * W) + 'px';
+    sel.style.width = Math.max(6, (st.end - st.start) / D * W) + 'px';
+    $('tStart').textContent = fmt(st.start);
+    $('tEnd').textContent = fmt(st.end);
+    const L = st.end - st.start;
+    $('tLen').textContent = L.toFixed(1) + ' s';
+    $('lenBox').classList.toggle('warn', L >= MODES[st.mode].max - 0.05);
+    const fm = Math.min(3, L / 2);
+    $('fadeIn').max = fm.toFixed(1); $('fadeOut').max = fm.toFixed(1);
+    syncFadeLabels();
+  }
+
+  function setSel(start, end, keepLen) {
+    const D = dur(), M = maxLen();
+    if (keepLen) {
+      const L = end - start;
+      start = clamp(start, 0, D - L); end = start + L;
+    } else {
+      start = clamp(start, 0, D); end = clamp(end, 0, D);
+      if (end - start < Math.min(MIN_LEN, D)) end = Math.min(D, start + Math.min(MIN_LEN, D));
+      if (end - start > M) end = start + M;
+    }
+    st.start = start; st.end = end;
+    changed();
+  }
+
+  let redrawQueued = false;
+  function changed() {
+    st.rendered = null;
+    layout();
+    if (!redrawQueued) { redrawQueued = true; requestAnimationFrame(() => { redrawQueued = false; drawWave(); drawDetail(); }); }
+    if (st.playing) schedulePreviewRestart();
+    $('result').classList.add('hidden');
+  }
+
+  function setMode(m, reset) {
+    st.mode = m;
+    document.querySelectorAll('#modeSeg button').forEach((b) => b.classList.toggle('on', b.dataset.mode === m));
+    const L = Math.min(MODES[m].def, dur());
+    let s = reset ? 0 : st.start;
+    if (reset && m === 'ring' && dur() > L) s = 0;
+    setSel(s, s + L, true);
+  }
+  $('modeSeg').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b && st.buf) setMode(b.dataset.mode, false); });
+
+  // pointer interactions
+  let drag = null;
+  wrap.addEventListener('pointerdown', (e) => {
+    if (!st.buf) return;
+    const rect = wrap.getBoundingClientRect(), W = rect.width, D = dur();
+    const t = (e.clientX - rect.left) / W * D;
+    const h = e.target.dataset && e.target.dataset.h;
+    if (h) drag = { type: h };
+    else if (e.target === sel) drag = { type: 'move', off: t - st.start };
+    else { const L = st.end - st.start; setSel(t - L / 2, t + L / 2, true); drag = { type: 'move', off: t - st.start }; }
+    wrap.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  wrap.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const rect = wrap.getBoundingClientRect(), D = dur();
+    const t = clamp((e.clientX - rect.left) / rect.width * D, 0, D);
+    const M = maxLen(), m = Math.min(MIN_LEN, D);
+    if (drag.type === 'move') { const L = st.end - st.start; setSel(t - drag.off, t - drag.off + L, true); }
+    else if (drag.type === 'l') { const s = clamp(t, Math.max(0, st.end - M), st.end - m); st.start = s; changed(); }
+    else if (drag.type === 'r') { const en = clamp(t, st.start + m, Math.min(D, st.start + M)); st.end = en; changed(); }
+  });
+  const endDrag = () => { drag = null; };
+  wrap.addEventListener('pointerup', endDrag);
+  wrap.addEventListener('pointercancel', endDrag);
+
+  // nudge buttons with hold-to-repeat
+  document.querySelectorAll('.nudge').forEach((btn) => {
+    let tmr = null, rep = null;
+    const act = () => {
+      const d = +btn.dataset.d, D = dur(), M = maxLen(), m = Math.min(MIN_LEN, D);
+      if (btn.dataset.nudge === 'start') { st.start = clamp(st.start + d, Math.max(0, st.end - M), st.end - m); }
+      else { st.end = clamp(st.end + d, st.start + m, Math.min(D, st.start + M)); }
+      st.start = Math.round(st.start * 1000) / 1000; st.end = Math.round(st.end * 1000) / 1000;
+      changed();
+    };
+    const stopRep = () => { clearTimeout(tmr); clearInterval(rep); tmr = rep = null; };
+    btn.addEventListener('pointerdown', (e) => { e.preventDefault(); act(); tmr = setTimeout(() => { rep = setInterval(act, 60); }, 350); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach((ev) => btn.addEventListener(ev, stopRep));
+  });
+
+  window.addEventListener('resize', () => { drawWave(); drawDetail(); layout(); });
+
+  // ---------- effects UI ----------
+  function syncFadeLabels() {
+    const fi = $('fadeIn'), fo = $('fadeOut');
+    if (+fi.value > +fi.max) fi.value = fi.max;
+    if (+fo.value > +fo.max) fo.value = fo.max;
+    $('fadeInV').textContent = (+fi.value).toFixed(1) + ' s';
+    $('fadeOutV').textContent = (+fo.value).toFixed(1) + ' s';
+  }
+  ['fadeIn', 'fadeOut', 'norm'].forEach((id) => $(id).addEventListener('input', () => { syncFadeLabels(); changed(); }));
+
+  // ---------- render (trim + fades + normalize + resample) ----------
+  function renderKey() { return [st.start, st.end, $('fadeIn').value, $('fadeOut').value, $('norm').checked].join('|'); }
+
+  async function render() {
+    const key = renderKey();
+    if (st.rendered && st.renderedKey === key) return st.rendered;
+    const b = st.buf, L = st.end - st.start;
+    const ch = Math.min(2, b.numberOfChannels);
+    const frames = Math.max(1, Math.ceil(L * OUT_RATE));
+    const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    const off = new OAC(ch, frames, OUT_RATE);
+
+    let gain = 1;
+    if ($('norm').checked) {
+      const sr = b.sampleRate, s0 = Math.floor(st.start * sr), s1 = Math.min(b.length, Math.ceil(st.end * sr));
+      let peak = 0;
+      for (let c = 0; c < b.numberOfChannels; c++) { const d = b.getChannelData(c); for (let s = s0; s < s1; s++) { const v = Math.abs(d[s]); if (v > peak) peak = v; } }
+      if (peak > 0.0001) gain = Math.min(10, 0.89 / peak); // -1 dBFS
+    }
+    const src = off.createBufferSource(); src.buffer = b;
+    const g = off.createGain();
+    const fi = Math.min(+$('fadeIn').value, L / 2), fo = Math.min(+$('fadeOut').value, L / 2);
+    const p = g.gain;
+    if (fi > 0) { p.setValueAtTime(0, 0); p.linearRampToValueAtTime(gain, fi); } else p.setValueAtTime(gain, 0);
+    if (fo > 0) { p.setValueAtTime(gain, Math.max(fi, L - fo)); p.linearRampToValueAtTime(0, L); }
+    src.connect(g); g.connect(off.destination);
+    src.start(0, st.start, L);
+    const out = await new Promise((res, rej) => {
+      off.oncomplete = (e) => res(e.renderedBuffer);
+      const r = off.startRendering();
+      if (r && r.then) r.then(res, rej);
+    });
+    st.rendered = out; st.renderedKey = key;
+    return out;
+  }
+
+  // ---------- preview ----------
+  let loop = true, restartTmr = null;
+  $('loopBtn').addEventListener('click', () => {
+    loop = !loop; $('loopBtn').classList.toggle('on', loop);
+    if (st.playing) st.playing.loop = loop;
+  });
+  $('playBtn').addEventListener('click', () => { st.playing ? stop() : play(); });
+
+  async function play() {
+    const ctx = getCtx();
+    if (ctx.state === 'suspended') await ctx.resume();
+    const btn = $('playBtn');
+    btn.disabled = true;
+    try {
+      const buf = await render();
+      stop(true);
+      const s = ctx.createBufferSource(); s.buffer = buf; s.loop = loop;
+      s.connect(ctx.destination);
+      s.onended = () => { if (st.playing === s) stop(); };
+      s.start();
+      st.playing = s; st.playT0 = ctx.currentTime; st.playLen = buf.duration;
+      btn.textContent = '■ Stop';
+      $('playheadAll').style.display = $('playheadDet').style.display = 'block';
+      tick();
+    } finally { btn.disabled = false; }
+  }
+
+  function stop(silent) {
+    clearTimeout(restartTmr);
+    if (st.playing) { const s = st.playing; st.playing = null; try { s.onended = null; s.stop(); } catch (_) {} }
+    cancelAnimationFrame(st.raf);
+    if (!silent) {
+      $('playBtn').textContent = '▶︎ Ascolta';
+      $('playheadAll').style.display = $('playheadDet').style.display = 'none';
+    }
+  }
+
+  function schedulePreviewRestart() {
+    clearTimeout(restartTmr);
+    restartTmr = setTimeout(() => { if (st.playing) play(); }, 300);
+  }
+
+  function tick() {
+    if (!st.playing) return;
+    const el = st.ctx.currentTime - st.playT0;
+    const p = loop ? (el % st.playLen) : Math.min(el, st.playLen);
+    const f = p / st.playLen;
+    const L = st.end - st.start;
+    $('playheadDet').style.left = (f * $('detail').clientWidth) + 'px';
+    $('playheadAll').style.left = ((st.start + f * L) / dur() * wrap.clientWidth) + 'px';
+    st.raf = requestAnimationFrame(tick);
+  }
+
+  // ---------- MP3 export ----------
+  const tick0 = () => new Promise((r) => setTimeout(r, 0));
+
+  function toI16(f32) {
+    const out = new Int16Array(f32.length);
+    for (let i = 0; i < f32.length; i++) { const s = clamp(f32[i], -1, 1); out[i] = s < 0 ? s * 0x8000 : s * 0x7fff; }
+    return out;
+  }
+
+  async function encodeMp3(buf, onProg) {
+    const ch = buf.numberOfChannels;
+    const enc = new lamejs.Mp3Encoder(ch, buf.sampleRate, KBPS);
+    const L = toI16(buf.getChannelData(0));
+    const R = ch > 1 ? toI16(buf.getChannelData(1)) : null;
+    const parts = [], BLOCK = 1152, PER_YIELD = BLOCK * 40;
+    for (let i = 0; i < L.length; i += BLOCK) {
+      const l = L.subarray(i, i + BLOCK);
+      const mp3 = R ? enc.encodeBuffer(l, R.subarray(i, i + BLOCK)) : enc.encodeBuffer(l);
+      if (mp3.length) parts.push(new Uint8Array(mp3));
+      if (i % PER_YIELD === 0) { onProg(i / L.length); await tick0(); }
+    }
+    const end = enc.flush(); if (end.length) parts.push(new Uint8Array(end));
+    onProg(1);
+    return new Blob(parts, { type: 'audio/mpeg' });
+  }
+
+  function safeName() {
+    const n = ($('name').value || st.fileBase || 'suoneria').trim()
+      .replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, ' ').slice(0, 60);
+    return (n || 'suoneria') + '.mp3';
+  }
+
+  $('makeBtn').addEventListener('click', async () => {
+    if (!st.buf) return;
+    stop();
+    const btn = $('makeBtn'), prog = $('prog'), bar = $('progBar');
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Preparo…';
+    prog.classList.remove('hidden'); bar.style.width = '0%';
+    try {
+      const buf = await render();
+      const blob = await encodeMp3(buf, (p) => { bar.style.width = Math.round(p * 100) + '%'; });
+      const name = safeName();
+      if (st.resultUrl) URL.revokeObjectURL(st.resultUrl);
+      st.resultUrl = URL.createObjectURL(blob);
+      st.resultFile = new File([blob], name, { type: 'audio/mpeg' });
+      $('resAudio').src = st.resultUrl;
+      const dl = $('dlBtn'); dl.href = st.resultUrl; dl.download = name;
+      const canShare = !!(navigator.canShare && navigator.canShare({ files: [st.resultFile] }));
+      $('shareBtn').classList.toggle('hidden', !canShare);
+      $('result').classList.remove('hidden');
+      $('result').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (err) {
+      console.error(err);
+      alert('Qualcosa è andato storto durante la creazione. Riprova con un pezzo più corto o un altro file.');
+    } finally {
+      btn.disabled = false; btn.textContent = '⬇︎ Crea suoneria';
+      setTimeout(() => prog.classList.add('hidden'), 600);
+    }
+  });
+
+  $('shareBtn').addEventListener('click', async () => {
+    try { await navigator.share({ files: [st.resultFile], title: st.resultFile.name }); }
+    catch (e) { if (e && e.name !== 'AbortError') alert('Condivisione non riuscita: usa il tasto Scarica.'); }
+  });
+
+  // ---------- guide tabs ----------
+  $('guideSeg').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    document.querySelectorAll('#guideSeg button').forEach((x) => x.classList.toggle('on', x === b));
+    ['g26', 'g18'].forEach((id) => $(id).classList.toggle('hidden', id !== b.dataset.g));
+  });
+})();
+</script>
+</body>
+</html>
