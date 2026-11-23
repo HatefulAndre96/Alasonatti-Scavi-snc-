@@ -132,6 +132,9 @@
   .guide .note { color: var(--muted); font-size: 14px; margin: 12px 0 0; }
   .tip { background: rgba(255,159,10,.1); border: 1px solid rgba(255,159,10,.3); color: #ffd28a; border-radius: 12px; padding: 10px 12px; font-size: 14px; margin-top: 12px; }
 
+  .rt { margin-top: 12px; background: var(--card-2); border-radius: 12px; padding: 12px; font-size: 14px; }
+  .rt p { margin: 0 0 10px; color: var(--muted); }
+  .rt p b { color: var(--text); }
   .err { background: rgba(255,69,58,.12); border: 1px solid rgba(255,69,58,.35); color: #ffb3ad; border-radius: 12px; padding: 10px 12px; font-size: 14px; margin-top: 12px; }
   .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -156,6 +159,12 @@
     </label>
     <div class="file-info hidden" id="fileInfo"><b id="fileName"></b><span id="fileDur"></span></div>
     <div class="err hidden" id="loadErr"></div>
+    <div class="rt hidden" id="rtBox">
+      <p>Safari non riesce a leggere l'audio di questo video in modo diretto. Posso estrarlo riproducendolo in silenzio: ci vuole <b id="rtTime">quanto dura il video</b>. Tieni lo schermo acceso e il sito aperto.</p>
+      <button type="button" class="btn primary" id="rtBtn">🎧 Estrai l'audio</button>
+      <div class="progress hidden" id="rtProg"><div id="rtBar"></div></div>
+      <button type="button" class="btn small hidden" id="rtCancel" style="margin-top:10px">Annulla</button>
+    </div>
   </section>
 
   <!-- 2. Editor -->
@@ -277,6 +286,7 @@
 <footer>Tutto elaborato in locale nel browser. Usa solo audio e video di cui hai i diritti.</footer>
 
 <script src="vendor/lame.min.js"></script>
+<script src="estrai-audio.js"></script>
 <script>
 (() => {
   'use strict';
@@ -322,21 +332,87 @@
   ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
   drop.addEventListener('drop', (e) => { const f = e.dataTransfer.files[0]; if (f) load(f); });
 
-  function decode(ctx, ab) {
-    return new Promise((res, rej) => {
-      const p = ctx.decodeAudioData(ab, res, rej);
-      if (p && p.then) p.then(res, rej);
+  // ?force=wc salta ADTS, ?force=rt va dritto alla registrazione (solo per test)
+  const FORCE = new URLSearchParams(location.search).get('force') || '';
+  const EA = window.EstraiAudio;
+  const isVideoLike = (f) => /^video\//.test(f.type) || /\.(mov|mp4|m4v|3gp|qt)$/i.test(f.name);
+  let rtFile = null, rtAbort = null;
+
+  function showErr(msg) { const e = $('loadErr'); e.textContent = msg; e.classList.remove('hidden'); }
+
+  function videoDuration(file) {
+    return new Promise((res) => {
+      const v = document.createElement('video'), u = URL.createObjectURL(file);
+      const done = (d) => { URL.revokeObjectURL(u); res(d); };
+      v.preload = 'metadata'; v.muted = true;
+      v.onloadedmetadata = () => done(isFinite(v.duration) ? v.duration : 0);
+      v.onerror = () => done(0);
+      setTimeout(() => done(0), 5000);
+      v.src = u;
     });
   }
 
   async function load(file) {
     stop();
+    if (rtAbort) rtAbort.abort();
+    rtFile = null;
     $('loadErr').classList.add('hidden');
+    $('rtBox').classList.add('hidden');
     $('dropTitle').innerHTML = '<span class="spinner" style="display:inline-block;vertical-align:middle"></span> Estraggo l\'audio…';
+    const ctx = getCtx();
+    let buf = null, noAudio = false;
+    const tryDirect = async () => {
+      if (FORCE || (isVideoLike(file) && file.size > 250e6)) return null; // video enormi: niente file intero in RAM
+      try { return await EA.decodeAudioDataP(ctx, await file.arrayBuffer()); } catch (e) { console.warn('decodifica diretta', e); return null; }
+    };
+    const tryContainer = async () => {
+      if (FORCE === 'rt') return null;
+      try { return await EA.fromContainer(file, ctx, { skipAdts: FORCE === 'wc' }); }
+      catch (e) { console.warn('estrazione contenitore', e, e.causes); if (e.name === 'NoAudioError') noAudio = true; return null; }
+    };
     try {
-      const ab = await file.arrayBuffer();
-      const buf = await decode(getCtx(), ab);
-      if (!buf || !buf.duration) throw new Error('vuoto');
+      if (isVideoLike(file)) { buf = await tryContainer(); if (!buf && !noAudio) buf = await tryDirect(); }
+      else { buf = await tryDirect(); if (!buf) buf = await tryContainer(); }
+
+      if (buf && buf.duration) return onDecoded(buf, file);
+      if (noAudio) {
+        showErr('Questo video non ha una traccia audio. Succede con time-lapse, registrazioni dello schermo senza microfono e alcuni video salvati dai social.');
+      } else if (isVideoLike(file) || !file.type) {
+        rtFile = file;
+        const d = await videoDuration(file);
+        $('rtTime').textContent = d ? 'circa ' + fmt(d).replace(/\.\d$/, '') : 'quanto dura il video';
+        $('rtBox').classList.remove('hidden');
+      } else {
+        showErr('Non riesco a leggere l\'audio di questo file. Prova con un altro formato (MP3, M4A, MP4).');
+      }
+    } finally {
+      $('dropTitle').textContent = st.buf ? 'Cambia file' : 'Tocca per scegliere un video o un audio';
+    }
+  }
+
+  $('rtBtn').addEventListener('click', async () => {
+    if (!rtFile) return;
+    const file = rtFile;
+    rtAbort = new AbortController();
+    $('rtBtn').classList.add('hidden'); $('rtProg').classList.remove('hidden'); $('rtCancel').classList.remove('hidden');
+    $('rtBar').style.width = '0%';
+    try {
+      const buf = await EA.captureRealtime(file, getCtx(), (p) => { $('rtBar').style.width = Math.round(p * 100) + '%'; }, rtAbort.signal);
+      $('rtBox').classList.add('hidden');
+      onDecoded(buf, file);
+    } catch (e) {
+      console.warn('registrazione', e);
+      if (e.name === 'NoAudioError') { $('rtBox').classList.add('hidden'); showErr('Questo video sembra non avere audio (o è completamente muto).'); }
+      else if (e.name !== 'AbortError') { $('rtBox').classList.add('hidden'); showErr('Non sono riuscito a estrarre l\'audio nemmeno così. Prova a salvare il video come MP4 (es. condividendolo su WhatsApp con te stesso) e ricaricalo.'); }
+    } finally {
+      rtAbort = null;
+      $('rtBtn').classList.remove('hidden'); $('rtProg').classList.add('hidden'); $('rtCancel').classList.add('hidden');
+    }
+  });
+  $('rtCancel').addEventListener('click', () => { if (rtAbort) rtAbort.abort(); });
+
+  function onDecoded(buf, file) {
+    {
       st.buf = buf;
       st.fileBase = file.name.replace(/\.[^.]+$/, '').slice(0, 60) || 'suoneria';
       $('name').value = st.fileBase;
@@ -349,13 +425,7 @@
       computePeaks();
       setMode(st.mode, true);
       requestAnimationFrame(() => { drawWave(); layout(); });
-    } catch (err) {
-      console.error(err);
-      const e = $('loadErr');
-      e.textContent = 'Non riesco a leggere l\'audio di questo file. Prova un altro formato (MP3, M4A, MP4) o controlla che il video abbia l\'audio.';
-      e.classList.remove('hidden');
-    } finally {
-      $('dropTitle').textContent = st.buf ? 'Cambia file' : 'Tocca per scegliere un video o un audio';
+      $('dropTitle').textContent = 'Cambia file';
     }
   }
 
